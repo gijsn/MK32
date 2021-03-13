@@ -13,18 +13,16 @@
 
 // Keymaps are designed to be relatively interchangeable with QMK
 enum custom_keycodes {
-	QWERTY, NUM,
-    PLUGINS,
+	QWERTY, NUM
 };
 
 //Set these for each layer and use when layers are needed in a hold-to use layer
 enum layer_holds {
-	QWERTY_H = LAYER_HOLD_BASE_VAL, NUM_H,FUNCS_H
+	QWERTY_H = LAYER_HOLD_BASE_VAL, NUM_H
 };
 
 // array to hold names of layouts for oled
-char default_layout_names[LAYERS][MAX_LAYOUT_NAME_LENGTH] = { "QWERTY", "NUM",
-		  "Plugins",
+char default_layout_names[LAYERS][MAX_LAYOUT_NAME_LENGTH] = { "QWERTY", "NUM"
 		};
 
 /* select a keycode for your macro
@@ -53,17 +51,15 @@ uint16_t default_encoder_map[LAYERS][ENCODER_SIZE] = {
 		// |VOL + | VOL - | MUTE |
 		{ MEDIA_ENCODER, KC_AUDIO_VOL_UP, KC_AUDIO_VOL_DOWN, KC_AUDIO_MUTE },
 		// |Y+|Y-| LEFT CLICK|
-		{ MOUSE_ENCODER, KC_MS_UP, KC_MS_DOWN, KC_MS_BTN1 },
-
-		{ MOUSE_ENCODER, KC_MS_UP, KC_MS_DOWN, KC_MS_BTN1 } };
+		{ MOUSE_ENCODER, KC_MS_UP, KC_MS_DOWN, KC_MS_BTN1 }
+		};
 
 uint16_t default_slave_encoder_map[LAYERS][ENCODER_SIZE] = {
 		// |VOL + | VOL - | MUTE |
 		{ MOUSE_ENCODER, KC_MS_WH_UP, KC_MS_WH_DOWN	, KC_AUDIO_MUTE },
 		// |Y+|Y-| LEFT CLICK|
-		{ MOUSE_ENCODER, KC_MS_RIGHT, KC_MS_LEFT, KC_MS_BTN2 },
-		// |Y+|Y-| LEFT CLICK|
-		{ MOUSE_ENCODER, KC_MS_RIGHT, KC_MS_LEFT, KC_MS_BTN2 } };
+		{ MOUSE_ENCODER, KC_MS_RIGHT, KC_MS_LEFT, KC_MS_BTN2 }
+		};
 
 // Fillers to make layering more clear
 #define _______ KC_TRNS
@@ -88,70 +84,26 @@ uint16_t default_slave_encoder_map[LAYERS][ENCODER_SIZE] = {
 			 *                            |default |RAISE|    |lower|NUM |
 			 *                              --------------    ---------------
 			 */
-			  {KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINUS },
-			  {KC_ESC,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_EQUAL},
-			  {KC_TAB,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT },
-			  {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_UP } ,
-			  {KC_LCTRL,KC_LGUI, KC_LALT, KC_SPC, KC_SPC,  NUM_H,  KC_DEL,  NUM,   LOWER, KC_BSPC, KC_ENT,  KC_LEFT },
-			  {DEFAULT,RAISE, KC_NONE, KC_NONE, KC_NONE,   KC_NONE,  KC_RIGHT,  KC_DOWN,   KC_NONE, KC_NONE, KC_NONE,   KC_NONE }
-
+			  {KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL, KC_BSPC, KC_GRV },
+			  {KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS, KC_DEL},
+			  {KC_CAPS,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, KC_NONE, KC_ENT, KC_PGUP},
+			  {KC_LSFT, KC_NONE, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT, KC_UP, KC_PGUP} ,
+			  {KC_LCTRL,KC_LGUI, KC_LALT, KC_NONE, KC_NONE, KC_NONE, KC_SPC,  KC_NONE, KC_NONE, KC_RALT, NUM_H,  KC_RCTL, KC_LEFT, KC_DOWN, KC_RIGHT}
+			  
 	};
 
 	 uint16_t _NUM[MATRIX_ROWS][KEYMAP_COLS]={
 
 
-			/* Nums
-			 * ,-----------------------------------------.    .-----------------------------------------.
-			 * | F1   |   F2 |   F3 |   F4  |  F5  |  F6  |   |   F7  |  F8  |  F9  |  F10 | F11  |  F12 |
-			 * |------+------+------+-------+------+------|   |-------+------+------+------+------+------|
-			 * | Esc  |   Q  |   W  |   E   |   R  |   T  |   |    Y  |   U  |   I  |   [ |   ]   |  \   |
-			 * |------+------+------+-------+------+------|   |-------+------+------+------+------+------|
-			 * | Tab  |   A  |   S  |   D   |   F  |   G  |   |    H  |   J  |   K  |   L  |   ;  |  '   |
-			 * |------+------+------+-------+------+------|   |-------+------+------+------+------+------|
-			 * | Shift|   Z  |   X  |   C   |   V  |   B  |   |    N  |   M  |   ,  |   .  |   /  |  up  |
-			 * |------+------+------+-------+------+------|   |-------+------+------+------+------+------|
-			 * | Ctrl | GUI  |  Alt | Space |Space |NUM_H |   |  Del  |Bspc  |Enter | Left | Right  |Down  |
-			 * `------------------------------------------'    ------------------------------------------'
-			 *                            |default |RAISE|    |lower|NUM |
-			 *                              --------------    ---------------
-			 */
-			  { KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,    KC_F6,    KC_F7,    KC_F8,    KC_F9, KC_F10,KC_F11,  KC_F12 },
-			  {KC_ESC,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_LBRC,    KC_RBRC, KC_BSLASH },
-			  {KC_TAB,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT },
-			  {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_EQUAL } ,
-			  {KC_LCTRL,KC_LGUI, KC_LALT, KC_SPC, KC_SPC,  NUM_H,  KC_DEL,  NUM,   LOWER, KC_BSPC, KC_ENT,  KC_LEFT },
-			  {DEFAULT,RAISE, KC_NONE, KC_NONE, KC_NONE,   KC_NONE,  KC_RIGHT,  KC_DOWN,   KC_NONE, KC_NONE, KC_NONE,   KC_NONE }
+ 		{_______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DEL,  KC_INS},
+        {_______, _______, KC_UP,   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_HOME},
+        {_______, KC_LEFT, KC_DOWN, KC_RGHT, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_END},
+        {_______, _______, _______, _______, _______, _______, _______,  _______, KC_VOLD, KC_VOLU, KC_MUTE, _______, KC_BTN1, KC_MS_U, KC_BTN2},
+        {_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, DEFAULT , _______,KC_MS_L, KC_MS_D, KC_MS_R}
 	};
 
-	 uint16_t _PLUGINS[MATRIX_ROWS][KEYMAP_COLS]={
-
-
-				/* Plugins
-				 * ,-----------------------------------------.    .-----------------------------------------.
-				 * |  ~   |   1  |   2  |   3   |   4  |   5  |   |    6  |   7  |   8  |   9  |   0  |   -  |
-				 * |------+------+------+-------+------+------|   |-------+------+------+------+------+------|
-				 * | Esc  |   Q  |   W  |   E   |   R  |   T  |   |    Y  |   U  |   I  |   O  |   P  |  =   |
-				 * |------+------+------+-------+------+------|   |-------+------+------+------+------+------|
-				 * | Tab  |   A  |   S  |   D   |   F  |   G  |   |    H  |   J  |   K  |   L  |   ;  |  '   |
-				 * |------+------+------+-------+------+------|   |-------+------+------+------+------+------|
-				 * | Shift|   Z  |   X  |   C   |   V  |   B  |   |    N  |   M  |   ,  |   .  |   /  |  up  |
-				 * |------+------+------+-------+------+------|   |-------+------+------+------+------+------|
-				 * | Ctrl | GUI  |  Alt | Space |Space |NUM_H |   |  Del  |Bspc  |Enter | Left | Right  |Down  |
-				 * `------------------------------------------'    ------------------------------------------'
-				 *                            |default |RAISE|    |lower|NUM |
-				 *                              --------------    ---------------
-				 */
-				  {KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC },
-				  {KC_ESC,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC },
-				  {KC_TAB,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT },
-				  {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT } ,
-				  {KC_LCTRL,KC_LGUI, KC_LALT, KC_SPC, KC_SPC,  NUM_H,  KC_DEL,  NUM,   LOWER, KC_BSPC, KC_ENT,  KC_LEFT },
-				  {DEFAULT,RAISE, KC_NONE, KC_NONE, KC_NONE,   KC_NONE,  KC_RIGHT,  KC_DOWN,   KC_NONE, KC_NONE, KC_NONE,   KC_NONE }
-
-		};
  //Create an array that points to the various keymaps
-uint16_t (*default_layouts[])[MATRIX_ROWS][KEYMAP_COLS] = { &_QWERTY, &_NUM,
-			&_PLUGINS
+uint16_t (*default_layouts[])[MATRIX_ROWS][KEYMAP_COLS] = { &_QWERTY, &_NUM
 		};
 
 uint8_t current_layout = 0;
