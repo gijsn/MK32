@@ -60,7 +60,7 @@ uint32_t get_battery_level(void) {
 	voltage = esp_adc_cal_raw_to_voltage(adc_reading, adc_chars);
 	uint32_t battery_percent = ((voltage - Vout_min) * 100
 			/ (Vout_max - Vout_min));
-//    printf("Raw: %d\tVoltage: %dmV\tPercent: %d\n", adc_reading, voltage, battery_percent);
+    printf("Raw: %d\tVoltage: %dmV\tPercent: %d\n", adc_reading, voltage, battery_percent);
 	return battery_percent;
 
 }
