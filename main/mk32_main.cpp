@@ -101,6 +101,25 @@ extern "C" void oled_task(void *pvParameters) {
 	}
 #endif
 }
+//handle battery reports over BLE
+extern "C" void battery_reports(void *pvParameters) {
+	//uint8_t past_battery_report[1] = { 0 };
+	
+	while(1){
+		uint32_t bat_level = get_battery_level();
+		void* pReport = (void*) &bat_level;
+
+		ESP_LOGI("Battery Monitor","battery level %d", bat_level);
+		if(BLE_EN == 1){
+			xQueueSend(battery_q, pReport, (TickType_t) 0);
+		}
+		if(input_str_q != NULL){
+			xQueueSend(input_str_q, pReport, (TickType_t) 0);
+		}
+		vTaskDelay(60*1000/ portTICK_PERIOD_MS);
+	}
+}
+
 
 //How to handle key reports
 extern "C" void key_reports(void *pvParameters) {
@@ -133,7 +152,7 @@ extern "C" void key_reports(void *pvParameters) {
 
 			uint16_t cur_index = 2;
 			//Phone's mtu size is usuaully limited to 20 bytes
-			for(uint16_t i = 2; i < REPORT_LEN && cur_index < TRUNC_SIZE; ++i){
+		for(uint16_t i = 2; i < REPORT_LEN && cur_index < TRUNC_SIZE; ++i){
 				if(report_state[i] != 0){
 					trunc_report[cur_index] = report_state[i];
 					++cur_index;
@@ -155,7 +174,6 @@ extern "C" void key_reports(void *pvParameters) {
 		}
 
 	}
-
 }
 
 //Handling rotary encoder
@@ -358,6 +376,8 @@ extern "C" void app_main() {
 
 #ifdef BATT_STAT
 	init_batt_monitor();
+	xTaskCreatePinnedToCore(battery_reports, "battery reporst", 4096, NULL,
+			configMAX_PRIORITIES, NULL, 1);
 	ESP_LOGI("Battery monitor", "initializezd");
 #endif
 
