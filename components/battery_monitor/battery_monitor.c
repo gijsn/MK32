@@ -37,42 +37,56 @@
 #define DEFAULT_VREF    1100        //Use adc2_vref_to_gpio() to obtain a better estimate
 #define NO_OF_SAMPLES   500          //Multisampling
 
-static const adc_channel_t channel = BATT_PIN;
-static const adc_atten_t atten = ADC_ATTEN_DB_2_5;
-static const adc_unit_t unit = ADC_UNIT_1;
-
-uint32_t voltage = 0;
-
-static esp_adc_cal_characteristics_t *adc_chars;
+//static const adc_channel_t channel = BATT_PIN;
+//reference voltage
+uint16_t vref = 1100;
 //check battery level
 
-uint32_t get_battery_level(void) {
+uint8_t get_battery_level(void) {
 
 	uint32_t adc_reading = 0;
 	//Multisampling
 
 	for (int i = 0; i < NO_OF_SAMPLES; i++) {
-		adc_reading += adc1_get_raw((adc1_channel_t) channel);
+		adc_reading += adc1_get_raw(ADC1_CHANNEL_6);
 	}
 	adc_reading /= NO_OF_SAMPLES;
 
-	//Convert adc_reading to voltage in mV
-	voltage = esp_adc_cal_raw_to_voltage(adc_reading, adc_chars);
-	uint32_t battery_percent = ((voltage - Vout_min) * 100
-			/ (Vout_max - Vout_min));
-    printf("Raw: %d\tVoltage: %dmV\tPercent: %d\n", adc_reading, voltage, battery_percent);
-	return battery_percent;
+	float battery_voltage = ((float)adc_reading / 4095.0)*2.0 *3.3 * (vref / 1000.0);
 
+	float battery_percent = ((battery_voltage - Vin_min) * 100 / (Vin_max - Vin_min));
+
+	ESP_LOGI("battery_monitor", "raw %u, Voltage: %fV percentage %f, as int %u", adc_reading, battery_voltage, battery_percent, (uint8_t) battery_percent);
+	if ((uint8_t) battery_percent > 100){ 
+		return 100;
+	}else{
+		return (uint8_t) battery_percent ;
+	}
 }
 
 //initialize battery monitor pin
 void init_batt_monitor(void) {
 
+	gpio_pad_select_gpio(GPIO_NUM_14);
+	gpio_set_direction(GPIO_NUM_14, GPIO_MODE_OUTPUT);
+	gpio_set_level(GPIO_NUM_14, 1);
+
 	adc1_config_width(ADC_WIDTH_BIT_12);
-	adc1_config_channel_atten(BATT_PIN, atten);
-	adc_chars = calloc(1, sizeof(esp_adc_cal_characteristics_t));
-	esp_adc_cal_characterize(unit, atten, ADC_WIDTH_BIT_12, DEFAULT_VREF,
-			adc_chars);
+	adc1_config_channel_atten(BATT_PIN, ADC_ATTEN_DB_11);
+
+	esp_adc_cal_characteristics_t adc_chars;
+	esp_adc_cal_value_t val_type = esp_adc_cal_characterize(ADC_UNIT_1, ADC_ATTEN_DB_11, ADC_WIDTH_BIT_12, 1100, &adc_chars);
+	if(val_type == ESP_ADC_CAL_VAL_EFUSE_VREF){
+		ESP_LOGI("battery_monitor", "eFuse Vref:%umV", adc_chars.vref);
+		vref = adc_chars.vref;
+	} else if (val_type == ESP_ADC_CAL_VAL_EFUSE_TP){
+		ESP_LOGI("battery_monitor", "Two Point --> coeff_a %umV, coeff_b %umV", adc_chars.coeff_a, adc_chars.coeff_b);
+	} else {
+		ESP_LOGI("batery monitor", "default Vref: 1100mV");
+	}
+	// adc_chars = calloc(1, sizeof(esp_adc_cal_characteristics_t));
+	// esp_adc_cal_characterize(unit, atten, ADC_WIDTH_BIT_12, DEFAULT_VREF,
+	// 		adc_chars);
 
 }
 

@@ -23,13 +23,13 @@ extern "C" {
  * battery voltage isn't completely linear, it would be better to use a table for specific battery
  * For now this is an ok approximation.
  */
-#define Vin_max 4200 //Max Battery voltage [mV]
-#define Vin_min  3400 //Battery discharge Voltage[mV]
+#define Vin_max 4.200 //Max Battery voltage [V]
+#define Vin_min  3.400 //Battery discharge Voltage[V]
 
 #define Vout_max Vin_max*R_2/(R_1+R_2) //Max voltage on analog pin [mV]
 #define Vout_min Vin_min*R_2/(R_1+R_2) //Min voltage on analog pin [mV]
 
-uint32_t get_battery_level(void);
+uint8_t get_battery_level(void);
 
 //initialize battery monitor pin
 void init_batt_monitor(void);
