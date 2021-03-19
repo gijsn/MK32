@@ -1,4 +1,12 @@
-# MK32 - Simple BLE keyboard for ESP32
+# Sick 68 and TTGO T-display compatible
+See the pin layout in `matrix.c` file for connection instructions. Desolder the display from the module in order to access the addtional GPIO pins. Use the battery connector to connect a battery. Included battery monitor
+
+The keyboard layout is now compatible with the Sick 68 layout: (you will need to adapt the microcontroller mounting spot a bit to accomodate the USB-C connector and TTGO board)
+https://www.thingiverse.com/thing:3478494
+
+
+
+# MK32 - Simple BLE keyboard for ESP32 
 Note: Currently tested and working on esp-idf v4.0.  
 MK32 is a BLE keyboard firmware for ESP32 Microcontrollers,designed to be relativley easily customizable.  
 Please refer to the [MK32 Wiki page](https://github.com/Galzai/MK32/wiki) for information about building your own keyboard.
