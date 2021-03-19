@@ -67,6 +67,7 @@ QueueHandle_t espnow_recieve_q;
 
 bool DEEP_SLEEP = true; // flag to check if we need to go to deep sleep
 
+bool charging = true;
 #ifdef OLED_ENABLE
 TaskHandle_t xOledTask;
 #endif
@@ -107,6 +108,12 @@ extern "C" void battery_reports(void *pvParameters) {
 	
 	while(1){
 		uint32_t bat_level = get_battery_level();
+		//if battery level is above 100, we're charging
+		if(bat_level > 100){
+			bat_level = 100;
+			//if charging, do not enter deepsleep
+			DEEP_SLEEP = false;
+		}
 		void* pReport = (void*) &bat_level;
 
 		ESP_LOGI("Battery Monitor","battery level %d", bat_level);

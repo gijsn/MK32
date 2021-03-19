@@ -46,10 +46,11 @@ uint8_t get_battery_level(void) {
 
 	uint32_t adc_reading = 0;
 	//Multisampling
-
+gpio_set_level(GPIO_NUM_14, 1);
 	for (int i = 0; i < NO_OF_SAMPLES; i++) {
 		adc_reading += adc1_get_raw(ADC1_CHANNEL_6);
 	}
+	gpio_set_level(GPIO_NUM_14, 0);
 	adc_reading /= NO_OF_SAMPLES;
 
 	float battery_voltage = ((float)adc_reading / 4095.0)*2.0 *3.3 * (vref / 1000.0);
@@ -57,11 +58,9 @@ uint8_t get_battery_level(void) {
 	float battery_percent = ((battery_voltage - Vin_min) * 100 / (Vin_max - Vin_min));
 
 	ESP_LOGI("battery_monitor", "raw %u, Voltage: %fV percentage %f, as int %u", adc_reading, battery_voltage, battery_percent, (uint8_t) battery_percent);
-	if ((uint8_t) battery_percent > 100){ 
-		return 100;
-	}else{
-		return (uint8_t) battery_percent ;
-	}
+
+	return (uint8_t) battery_percent;
+	
 }
 
 //initialize battery monitor pin
@@ -87,6 +86,6 @@ void init_batt_monitor(void) {
 	// adc_chars = calloc(1, sizeof(esp_adc_cal_characteristics_t));
 	// esp_adc_cal_characterize(unit, atten, ADC_WIDTH_BIT_12, DEFAULT_VREF,
 	// 		adc_chars);
-
+gpio_set_level(GPIO_NUM_14, 0);
 }
 
