@@ -26,12 +26,12 @@
 #define DEBOUNCE 4 //debounce time in ms
 
 //Define matrix
-#define KEYPADS 2 // intended in order to create a Multiple keypad split boards
-#define MATRIX_ROWS 6
-#define MATRIX_COLS 6 // For split keyboards, define columns for one side only.
+#define KEYPADS 1 // intended in order to create a Multiple keypad split boards
+#define MATRIX_ROWS 5
+#define MATRIX_COLS 15 // For split keyboards, define columns for one side only.
 
 #define NKRO // does not work on Android and iOS!,  we can get 18KRO on those
-#define LAYERS 3 // number of layers defined
+#define LAYERS 2 // number of layers defined
 
 // Select diode direction
 #define COL2ROW
@@ -39,7 +39,7 @@
 
 //Encoder definitions
 //#define R_ENCODER // undefine if no rotary encoder is used
-#define R_ENCODER_SLAVE // undefine if no rotary encoder is used on slave pad
+//#define R_ENCODER_SLAVE // undefine if no rotary encoder is used on slave pad
 #define ENCODER_A_PIN GPIO_NUM_17 // encoder phase A pin
 #define ENCODER_B_PIN GPIO_NUM_34// encoder phase B pin
 #define ENCODER_S_PIN GPIO_NUM_16// encoder switch pin
@@ -58,7 +58,7 @@
 #define BATT_PIN ADC1_CHANNEL_7 //gpio pin 35, refer to the esp32 before modifying
 
 //deep sleep parameters, mind that reconnecting after deep sleep might take a minute or two
-#define SLEEP_MINS 45 // undefine if you do not need deep sleep, otherwise define number of minutes for deepsleep
+#define SLEEP_MINS 5 // undefine if you do not need deep sleep, otherwise define number of minutes for deepsleep
 
 /*
  *---------------------------- Everything below here should not be modified for standard usage----------------------
